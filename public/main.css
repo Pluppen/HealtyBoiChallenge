@@ -1,0 +1,49 @@
+html, body {
+    display: block;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: url('https://external-preview.redd.it/AUXwGcVgSh0v6POuTDYvWH1kEzBQvK1EWb777KbSp4w.jpg?width=1080&crop=smart&auto=webp&s=028332905ef9d21beee0da2302fa7c6b78c11724');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center bottom;
+}
+
+h1 {
+    text-align: center;
+    text-size: 10em;
+    background-color: #3B5249;
+    padding: 10px;
+    width: auto;
+    color: #A4B494;
+}
+
+.container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 60%;
+    flex-wrap: wrap;
+}
+
+.card {
+    text-align: center;
+    background-color: #34252F;
+    color: #fff;
+    padding: 10px;
+    margin: 10px;
+    display: block;
+    width: 40%;
+    max-width: 320px;
+    border: solid #bec5ad;
+    border-width: 10px;
+    border-radius: 10px;
+}
+
+.card img {
+    border-radius: 10px;
+}
+

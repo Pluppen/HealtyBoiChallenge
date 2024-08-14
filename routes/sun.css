@@ -1,0 +1,63 @@
+$size: 1rem;
+$color: yellow;
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.sun {
+  width: $size;
+  height: $size;
+  background: $color;
+  box-shadow:
+		0 -5*$size $color,
+	  
+		-4*$size -4*$size $color,
+		0 -4*$size $color,
+		4*$size -4*$size $color,
+	  
+		-3*$size -3*$size $color,
+		3*$size -3*$size $color,
+	  
+		-1*$size -2*$size $color,
+		0 -2*$size $color,
+		$size -2*$size $color,
+	  
+		-2*$size -1*$size $color,
+		-1*$size -1*$size $color,
+		0 -1*$size $color,
+		$size -1*$size $color,
+		2*$size -1*$size $color,
+	  
+		-5*$size 0 $color,
+		-4*$size 0 $color,
+		-2*$size 0 $color,
+		-1*$size 0 $color,
+		$size 0 $color,
+		2*$size 0 $color,
+		4*$size 0 $color,
+		5*$size 0 $color,
+	  
+		-2*$size $size $color,
+		-1*$size $size $color,
+		0 $size $color,
+		$size $size $color,
+		2*$size $size $color,
+
+		-1*$size 2*$size $color,
+		0 2*$size $color,
+		$size 2*$size $color,
+
+		-3*$size 3*$size $color,
+		3*$size 3*$size $color,
+  
+		-4*$size 4*$size $color,
+		0 4*$size $color,
+		4*$size 4*$size $color,
+	  
+		0 5*$size $color;
+}
+
