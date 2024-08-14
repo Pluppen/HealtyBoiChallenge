@@ -47,3 +47,8 @@ h1 {
     border-radius: 10px;
 }
 
+.card canvas {
+    border-radius: 10px;
+    width: 194px;
+    height: 182px;
+}
