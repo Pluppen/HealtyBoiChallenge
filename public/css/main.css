@@ -18,13 +18,17 @@ html, body {
 }
 
 h1 {
-    text-align: center;
-    text-size: 10em;
-    background-color: #3B5249;
-    padding: 10px;
-    width: auto;
-    color: #A4B494;
-    padding: 20px;
+    font-size: 3em;
+}
+
+nav {
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+    margin: 0 auto;
+    color: #002E2C;
 }
 
 .container {

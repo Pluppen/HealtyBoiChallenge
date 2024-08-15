@@ -6,10 +6,7 @@ const router = express.Router();
 
 const shaderDirectory = "./public/shaders";
 
-const accounts = [];
-const players = [];
-// Set TEST_MODE = true to not have to login again after each code change while testing.
-const TEST_MODE = false;
+let accounts = [];
 
 const names = [
   "Tim",
@@ -44,17 +41,12 @@ function createAccount(username, password) {
       { encoding: "utf8" },
     ),
     useShaderForProfilePicture: false,
-  };
-  accounts.push(account);
-  players.push({
-    id: id,
-    name: account.username,
     xp: 0,
     img: images[id % images.length],
     level: 0,
     maxxp: 100,
-  });
-  account.player = players[players.length - 1];
+  };
+  accounts.push(account);
 
   return account;
 }
@@ -64,58 +56,51 @@ for (const name of names) {
 }
 
 router.get("/", (req, res) => {
-  if (TEST_MODE) {
-    req.session.accountId = 0;
-  }
-  if (req.session.accountId !== undefined) {
-    res.render("index", {
-      title: "HealtyBoiGame",
-      message: "Hello there!",
-      loggedInId: req.session.accountId,
-      accounts: accounts,
-    });
-  } else {
-    res.render("login", { title: "Login" });
-  }
+  res.render("index", {
+    title: "HealtyBoiGame",
+    message: "Hello there!",
+    loggedInId: req.session.accountId,
+    accounts: accounts,
+  });
 });
 
 router.post("/", (req, res) => {
-  let xpMultiplier = 1;
-
-  if ("remove-xp" in req.body) {
-    xpMultiplier = -1;
-  }
-
   let modalInfo = null;
+  accounts = accounts.map((account) => {
+    if (account.id == req.body.id) {
+      let xpMultiplier = 1;
 
-  const player = players.find((player) => player.id == req.body.id);
-  let newXp = player.xp + 10 * xpMultiplier;
-  let level = player.level;
-  let maxxp = player.maxxp;
+      if ("remove-xp" in req.body) {
+        xpMultiplier = -1;
+      }
 
-  if (newXp >= maxxp) {
-    level += 1;
-    newXp = 0;
-    maxxp = level * 100;
+      let xp = account.xp + 10 * xpMultiplier;
+      let level = account.level;
+      let maxxp = account.maxxp;
 
-    modalInfo = {
-      title: "You Leveled Up!",
-      description: `You leveled up to level ${level}`,
-      extraHtml: '<i class="nes-icon is-large star"></i>',
-    };
-  }
+      if (xp >= maxxp) {
+        level += 1;
+        xp = 0;
+        maxxp = level * 100;
 
-  if (req.session.accountId !== undefined) {
-    res.render("index", {
-      title: "HealtyBoiGame",
-      message: "Hello there!",
-      accounts: accounts,
-      loggedInId: req.session.accountId,
-      modalInfo,
-    });
-  } else {
-    res.render("login", { title: "Login" });
-  }
+        modalInfo = {
+          title: "You Leveled Up!",
+          description: `You leveled up to level ${level}`,
+          extraHtml: '<i class="nes-icon is-large star"></i>',
+        };
+      }
+      return { ...account, level, maxxp, xp };
+    }
+    return account;
+  });
+
+  res.render("index", {
+    title: "HealtyBoiGame",
+    message: "Hello there!",
+    accounts,
+    loggedInId: req.session.accountId,
+    modalInfo,
+  });
 });
 
 router.get("/account", (req, res) => {
@@ -131,7 +116,7 @@ router.get("/account", (req, res) => {
 
 router.post("/account", (req, res) => {
   const username = req.body.username;
-  if (players.find((player) => player.name === username)) {
+  if (accounts.find((account) => account.name === username)) {
     res.render("error", {
       message: `The user '${username}' already exists.`,
     });
