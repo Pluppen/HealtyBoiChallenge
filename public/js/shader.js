@@ -1,9 +1,7 @@
 window.addEventListener("load", setupAllCanvases, false);
 
 async function setupAllCanvases() {
-  console.log(await fetch("/account"));
   const accounts = JSON.parse(await fetch("/account"));
-  console.log(accounts);
   const canvases = document.getElementsByTagName("canvas");
   for (const canvas of canvases) {
     const accountId = parseInt(canvas.id.replace("profilePictureCanvas", ""));
@@ -25,6 +23,7 @@ function getRenderingContext(id) {
     );
     return null;
   }
+  ctx.canvas = canvas;
   return ctx;
 }
 
@@ -119,7 +118,7 @@ async function setupCanvas(id, account) {
 }
 
 function initializeAttributes(ctx, account) {
-  const aspect = 194 / 182;
+  const aspect = ctx.canvas.clientWidth / ctx.canvas.clientHeight;
   const size = 1;
   const vertices = new Float32Array([
     -size,
