@@ -1,0 +1,16 @@
+html
+    head
+        title= title
+        link(rel="stylesheet", type="text/css", href="/css/main.css")
+        link(href="https://fonts.googleapis.com/css?family=Press+Start+2P", rel="stylesheet")
+        link(href="https://unpkg.com/nes.css/css/nes.css", rel="stylesheet")
+        script(type="text/javascript" src="/js/shader-setup.js")
+    body
+        h1=" HealtyBoi Challenge"
+        div(class="container")
+            textarea(name="vertexShader" form="shaderCode").
+              #{account.vertexShader}
+            textarea(name="fragmentShader" form="shaderCode").
+              #{account.fragmentShader}
+            form(action="shader" method="POST" id="shaderCode")
+                button +

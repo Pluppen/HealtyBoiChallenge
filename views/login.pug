@@ -1,0 +1,33 @@
+
+html
+    head
+        title= title
+        link(rel="stylesheet", type="text/css", href="/css/main.css")
+        link(href="https://fonts.googleapis.com/css?family=Press+Start+2P", rel="stylesheet")
+        link(href="https://unpkg.com/nes.css/css/nes.css", rel="stylesheet")
+        script(type="text/javascript" src="/js/shader-setup.js")
+    body
+        h1=" HealtyBoi Challenge - Not logged in"
+        div(class="container" style="background-color: rgb(0, 130, 15);")
+            form(action="/login" method="POST")
+                p(style="margin: 0").
+                  Username
+                input(name="username")
+                p(style="margin: 0").
+                  Password
+                input(name="password")
+                br
+                br
+                button Login
+
+        div(class="container" style="background-color: rgb(0, 130, 15);")
+            form(action="/account" method="POST")
+                p(style="margin: 0").
+                  Username
+                input(name="username")
+                p(style="margin: 0").
+                  Password
+                input(name="password")
+                br
+                br
+                button Create account
