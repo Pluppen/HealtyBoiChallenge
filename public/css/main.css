@@ -4,10 +4,17 @@ html, body {
     padding: 0;
     height: 100%;
     width: 100%;
-    background: url('https://external-preview.redd.it/AUXwGcVgSh0v6POuTDYvWH1kEzBQvK1EWb777KbSp4w.jpg?width=1080&crop=smart&auto=webp&s=028332905ef9d21beee0da2302fa7c6b78c11724');
+    //background: url('https://external-preview.redd.it/AUXwGcVgSh0v6POuTDYvWH1kEzBQvK1EWb777KbSp4w.jpg?width=1080&crop=smart&auto=webp&s=028332905ef9d21beee0da2302fa7c6b78c11724');
+    background: url('https://i.imgur.com/6Infbfn.gif');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center bottom;
+}
+
+#welcome-balloon {
+    position: absolute;
+    top: 30px;
+    left: 30px;
 }
 
 h1 {
@@ -31,22 +38,31 @@ h1 {
 
 .card {
     text-align: center;
-    background-color: #34252F;
+    background-color: #34252F !important;
     color: #fff;
     padding: 10px;
-    margin: 10px;
+    margin: 20px !important;
     display: block;
     width: 40%;
-    max-width: 240px;
-    border: solid #bec5ad;
-    border-width: 10px;
-    border-radius: 10px;
+    max-width: 320px;
+}
+
+.status-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.status-bar span {
+    font-size: 1.2em !important;
+    margin-right: 4px;
 }
 
 .card img {
     border-radius: 10px;
     width: 100%;
     height: 100%;
+    margin-bottom: 10px;
 }
 
 .card canvas {
@@ -54,4 +70,13 @@ h1 {
     border-radius: 10px;
     width: 100%;
     height: 192px;
+    margin-bottom: 10px;
+}
+
+.custom-dialog {
+    text-align: center;
+}
+
+.custom-dialog .dialog-menu {
+    padding: 0;
 }
