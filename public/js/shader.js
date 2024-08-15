@@ -50,6 +50,15 @@ function compileShader(ctx, type, source) {
   const shader = ctx.createShader(type);
   ctx.shaderSource(shader, source);
   ctx.compileShader(shader);
+
+  console.log(
+    "compile_status",
+    ctx.getShaderParameter(shader, ctx.COMPILE_STATUS),
+  );
+  if (!ctx.getShaderParameter(shader, ctx.COMPILE_STATUS)) {
+    console.error(`Failed compiling shader: ${ctx.getShaderInfoLog(shader)}`);
+    return null;
+  }
   return shader;
 }
 
@@ -119,7 +128,7 @@ async function setupCanvas(id, account) {
 
 function initializeAttributes(ctx, account) {
   const aspect = ctx.canvas.clientWidth / ctx.canvas.clientHeight;
-  const size = 1;
+  const size = 1.0;
   const vertices = new Float32Array([
     -size,
     size * aspect,
@@ -143,6 +152,17 @@ function initializeAttributes(ctx, account) {
   ctx.enableVertexAttribArray(ctx.program.pos);
   ctx.vertexAttribPointer(ctx.program.pos, 2, ctx.FLOAT, false, 0, 0);
 
+  const textureCoords = new Float32Array([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]);
+  ctx.textureCoordsBuffer = ctx.createBuffer();
+  ctx.bindBuffer(ctx.ARRAY_BUFFER, ctx.textureCoordsBuffer);
+  ctx.bufferData(ctx.ARRAY_BUFFER, textureCoords, ctx.STATIC_DRAW);
+
+  ctx.program.tex = ctx.getAttribLocation(ctx.program, "tex");
+  if (ctx.program.tex) {
+    ctx.enableVertexAttribArray(ctx.program.tex);
+    ctx.vertexAttribPointer(ctx.program.tex, 2, ctx.FLOAT, false, 0, 0);
+  }
+
   ctx.program.time = ctx.getUniformLocation(ctx.program, "time");
   if (ctx.program.time) {
     ctx.uniform1f(ctx.program.time, 0);
@@ -153,15 +173,55 @@ function initializeAttributes(ctx, account) {
     ctx.uniform2f(ctx.program.res, ctx.canvas.width, ctx.canvas.height);
   }
 
+  ctx.program.xp = ctx.getUniformLocation(ctx.program, "xp");
   if (ctx.program.xp) {
-    ctx.program.xp = ctx.getUniformLocation(ctx.program, "xp");
     ctx.uniform1f(ctx.program.xp, account.player.xp);
   }
 
+  ctx.program.level = ctx.getUniformLocation(ctx.program, "level");
   if (ctx.program.level) {
-    ctx.program.level = ctx.getUniformLocation(ctx.program, "level");
-    ctx.uniform1f(ctx.program.level, account.player.level || 0);
+    ctx.uniform1f(ctx.program.level, account.player.level);
   }
+
+  ctx.program.texture = ctx.getUniformLocation(ctx.program, "texture");
+  if (ctx.program.texture) {
+    console.log("setting texture uniform to 0");
+    ctx.uniform1i(ctx.program.texture, 0);
+  }
+
+  const texture = ctx.createTexture();
+  ctx.bindTexture(ctx.TEXTURE_2D, texture);
+  // these settings are required for non-power-of-two textures
+  ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_WRAP_S, ctx.CLAMP_TO_EDGE);
+  ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_WRAP_T, ctx.CLAMP_TO_EDGE);
+  ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MIN_FILTER, ctx.LINEAR);
+  ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MAG_FILTER, ctx.LINEAR);
+  // 1 pixel same color as card background as placeholder
+  ctx.texImage2D(
+    ctx.TEXTURE_2D,
+    0,
+    ctx.RGBA,
+    1,
+    1,
+    0,
+    ctx.RGBA,
+    ctx.UNSIGNED_BYTE,
+    new Uint8Array([52, 37, 47, 255]),
+  );
+  const image = new Image();
+  // image.src = account.img;
+  image.src = account.img;
+  image.addEventListener("load", function () {
+    ctx.bindTexture(ctx.TEXTURE_2D, texture);
+    ctx.texImage2D(
+      ctx.TEXTURE_2D,
+      0,
+      ctx.RGBA,
+      ctx.RGBA,
+      ctx.UNSIGNED_BYTE,
+      image,
+    );
+  });
 }
 
 function cleanup(ctx) {
