@@ -10,6 +10,12 @@ html, body {
     background-position: center bottom;
 }
 
+#welcome-balloon {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
 h1 {
     text-align: center;
     text-size: 10em;
@@ -31,19 +37,28 @@ h1 {
 
 .card {
     text-align: center;
-    background-color: #34252F;
+    background-color: #34252F !important;
     color: #fff;
     padding: 10px;
-    margin: 10px;
+    margin: 20px !important;
     display: block;
     width: 40%;
     max-width: 320px;
-    border: solid #bec5ad;
-    border-width: 10px;
-    border-radius: 10px;
+}
+
+.status-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.status-bar span {
+    font-size: 1.2em !important;
+    margin-right: 4px;
 }
 
 .card img {
     border-radius: 10px;
+    margin-bottom: 10px;
 }
 

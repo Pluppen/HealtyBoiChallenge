@@ -5,14 +5,20 @@ html
         link(href="https://fonts.googleapis.com/css?family=Press+Start+2P", rel="stylesheet")
         link(href="https://unpkg.com/nes.css/css/nes.css", rel="stylesheet")
     body
-        h1=" HealtyBoi Challenge"
+        h1="HealtyBoi Challenge"
         div(class="container")
             each player in players
-                form(class="card", method="POST")
+                form(class="card nes-container with-title is-dark is-rounded nes-text", method="POST")
                     img(src=player.img)
                     div(class="heart")
-                    h2 #{player.name}
-                    h3 #{player.xp}
+                    h2(class="nex")=player.name
+                    h3 Level #{player.level}
+                    div(class="status-bar")
+                        span(class="is-primary")=player.xp
+                        progress(class="nes-progress is-primary", value=player.xp, max=player.maxxp)
                     input(name="id", value=player.id, hidden)
-                    button +
+                    button(class="nes-btn is-success", name="add-xp")="+"
+                    button(class="nes-btn is-error", name="remove-xp")="-"
 
+        div(id="welcome-balloon", class="nes-balloon from-left is-dark")
+          p="Hejsan Svejsan!"
