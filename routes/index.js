@@ -8,6 +8,7 @@ const shaderDirectory = "./public/shaders";
 
 const accounts = [];
 const players = [];
+// Set TEST_MODE = true to not have to login again after each code change while testing.
 const TEST_MODE = true;
 
 const names = [
@@ -54,6 +55,8 @@ function createAccount(username, password) {
     maxxp: 100,
   });
   account.player = players[players.length - 1];
+
+  return account;
 }
 
 for (const name of names) {
@@ -68,6 +71,7 @@ router.get("/", (req, res) => {
     res.render("index", {
       title: "HealtyBoiGame",
       message: "Hello there!",
+      loggedInId: req.session.accountId,
       accounts: accounts,
     });
   } else {
@@ -106,6 +110,7 @@ router.post("/", (req, res) => {
       title: "HealtyBoiGame",
       message: "Hello there!",
       accounts: accounts,
+      loggedInId: req.session.accountId,
       modalInfo,
     });
   } else {
@@ -126,9 +131,9 @@ router.get("/account", (req, res) => {
 
 router.post("/account", (req, res) => {
   const username = req.body.username;
-  if (players.find((player) => player.username === username)) {
+  if (players.find((player) => player.name === username)) {
     res.render("error", {
-      message: `The username '${username}' already exists.`,
+      message: `The user '${username}' already exists.`,
     });
     return;
   }
@@ -138,6 +143,7 @@ router.post("/account", (req, res) => {
     return;
   }
 
+  const account = createAccount(username, password);
   req.session.accountId = account.id;
   res.redirect("/");
 });
