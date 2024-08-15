@@ -6,6 +6,16 @@ html
         link(href="https://unpkg.com/nes.css/css/nes.css", rel="stylesheet")
     body
         h1="HealtyBoi Challenge"
+        if modalInfo != null
+            section
+              dialog(class="nes-dialog is-dark is-rounded", id="dialog-dark-rounded")
+                form(method="dialog", class="custom-dialog")
+                  p(class="title")=modalInfo.title
+                  p=modalInfo.description
+                  p!=modalInfo.extraHtml
+                  menu(class="dialog-menu")
+                    button(class="nes-btn is-primary", name="dialog-menu")="Confirm"
+
         div(class="container")
             each player in players
                 form(class="card nes-container with-title is-dark is-rounded nes-text", method="POST")
@@ -22,3 +32,7 @@ html
 
         div(id="welcome-balloon", class="nes-balloon from-left is-dark")
           p="Hejsan Svejsan!"
+
+        if modalInfo != null
+            script="document.getElementById('dialog-dark-rounded').showModal();"
+            

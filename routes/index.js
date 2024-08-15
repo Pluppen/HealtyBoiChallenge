@@ -24,6 +24,8 @@ router.post('/', (req, res) => {
         xpMultiplier = -1;
     }
 
+    let modalInfo = null;
+
     players = players.map(player => {
         if (player.id == req.body.id) {
             let newXp = player.xp + (10 * xpMultiplier)
@@ -34,6 +36,12 @@ router.post('/', (req, res) => {
                 level+=1;
                 newXp = 0;
                 maxxp = level * 100;
+
+                modalInfo = {
+                    title: "You Leveled Up!",
+                    description: `You leveled up to level ${level}`,
+                    extraHtml: '<i class="nes-icon is-large star"></i>'
+                }
             }
 
             return {...player, xp: newXp, level, maxxp}
@@ -41,7 +49,7 @@ router.post('/', (req, res) => {
         return player
     }) 
 
-    res.render('index', {title: "HealtyBoiGame", message: 'Hello there!', players: players });
+    res.render('index', {title: "HealtyBoiGame", message: 'Hello there!', players: players, modalInfo });
 });
 
 module.exports = router;
