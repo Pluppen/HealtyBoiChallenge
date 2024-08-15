@@ -4,11 +4,11 @@ html, body {
     padding: 0;
     height: 100%;
     width: 100%;
-    //background: url('https://external-preview.redd.it/AUXwGcVgSh0v6POuTDYvWH1kEzBQvK1EWb777KbSp4w.jpg?width=1080&crop=smart&auto=webp&s=028332905ef9d21beee0da2302fa7c6b78c11724');
     background: url('https://i.imgur.com/6Infbfn.gif');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center bottom;
+    background-attachment: fixed;
 }
 
 #welcome-balloon {
@@ -24,6 +24,7 @@ h1 {
     padding: 10px;
     width: auto;
     color: #A4B494;
+    padding: 20px;
 }
 
 .container {
@@ -34,6 +35,22 @@ h1 {
     margin: 0 auto;
     width: 60%;
     flex-wrap: wrap;
+}
+
+.auth-container {
+    max-height: 100vh;
+    height: 80%;
+    display: flex;
+    width: 60%;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.auth-container .nes-container {
+    margin-left: 30px !important;
+    margin-right: 30px !important;
 }
 
 .card {

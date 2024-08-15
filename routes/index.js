@@ -9,7 +9,7 @@ const shaderDirectory = "./public/shaders";
 const accounts = [];
 const players = [];
 // Set TEST_MODE = true to not have to login again after each code change while testing.
-const TEST_MODE = true;
+const TEST_MODE = false;
 
 const names = [
   "Tim",

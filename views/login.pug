@@ -7,26 +7,23 @@ html
         link(href="https://unpkg.com/nes.css/css/nes.css", rel="stylesheet")
     body
         h1=" HealtyBoi Challenge - Not logged in"
-        div(class="container" style="background-color: rgb(0, 130, 15);")
-            form(action="/login" method="POST")
-                p(style="margin: 0").
-                  Username
-                input(name="username")
-                p(style="margin: 0").
-                  Password
-                input(name="password" type="password")
-                br
-                br
-                button Login
+        div(class="auth-container")
+            form(action="/login" method="POST", class="nes-container is-dark is-rounded with-title")
+                p(class="title") Login
+                div(class="nes-field")
+                    label(for="username") Username
+                    input(name="username", id="username", class="nes-input is-dark")
+                div(class="nes-field")
+                    label(for="password") Password
+                    input(name="password" type="password", id="password", class="nes-input is-dark")
+                button(class="nes-btn", style="margin-top: 20px;") Login
 
-        div(class="container" style="background-color: rgb(0, 130, 15);")
-            form(action="/account" method="POST")
-                p(style="margin: 0").
-                  Username
-                input(name="username")
-                p(style="margin: 0").
-                  Password
-                input(name="password" type="password")
-                br
-                br
-                button Create account
+            form(action="/account" method="POST", class="nes-container is-dark is-rounded with-title")
+                p(class="title") Create account
+                div(class="nes-field")
+                    label(for="username_2") Username
+                    input(name="username", id="username_2", class="nes-input is-dark")
+                div(class="nes-field")
+                    label(for="password_2") Password
+                    input(id="password_2", name="password", type="password", class="nes-input is-dark")
+                button(class="nes-btn", style="margin-top: 20px;") Create account

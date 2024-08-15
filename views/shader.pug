@@ -6,18 +6,24 @@ html
         link(href="https://unpkg.com/nes.css/css/nes.css", rel="stylesheet")
     body
         h1=" HealtyBoi Challenge"
-        textarea(name="vertexShader" form="shaderCode" style="display: block; margin: 5px; width: 80%; height: 30%;").
-          #{account.vertexShaderCode}
-        textarea(name="fragmentShader" form="shaderCode" style="display: block; margin: 5px; width: 80%; height: 30%;").
-          #{account.fragmentShaderCode}
-        div(class="container" style="background-color: white")
+        div(class="nes-container is-dark is-rounded with-title")
+            p(class="title") Vertex Shader
+            textarea(name="vertexShader" form="shaderCode", class="nes-textarea is-dark" rows="30").
+              #{account.vertexShaderCode}
+        div(class="nes-container is-dark is-rounded with-title")
+            p(class="title") Fragment Shader
+            textarea(name="fragmentShader" form="shaderCode", class="nes-textarea is-dark" rows="30").
+              #{account.fragmentShaderCode}
+        div(class="nes-container is-dark is-rounded")
             form(action="shader" method="POST" id="shaderCode")
-                span(style="margin: 5px;").
-                  Enabled
-                input(
-                  checked=account.useShaderForProfilePicture
-                  id="useShaderForProfilePicture"
-                  type="checkbox"
-                  name="useShaderForProfilePicture")
-                br
-                button Update
+                div(style="background-color: #212529; padding: 1rem 0;")
+                    label
+                        input(
+                          checked=account.useShaderForProfilePicture
+                          id="useShaderForProfilePicture"
+                          type="checkbox"
+                          name="useShaderForProfilePicture"
+                          class="nes-checkbox is-dark"
+                        )
+                        span() Enabled
+                button(class="nes-btn") Update
