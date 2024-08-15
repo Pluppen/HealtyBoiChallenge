@@ -4,13 +4,20 @@ html
         link(rel="stylesheet", type="text/css", href="/css/main.css")
         link(href="https://fonts.googleapis.com/css?family=Press+Start+2P", rel="stylesheet")
         link(href="https://unpkg.com/nes.css/css/nes.css", rel="stylesheet")
-        script(type="text/javascript" src="/js/shader-setup.js")
     body
         h1=" HealtyBoi Challenge"
-        div(class="container")
-            textarea(name="vertexShader" form="shaderCode").
-              #{account.vertexShader}
-            textarea(name="fragmentShader" form="shaderCode").
-              #{account.fragmentShader}
+        textarea(name="vertexShader" form="shaderCode" style="display: block; margin: 5px; width: 80%; height: 30%;").
+          #{account.vertexShaderCode}
+        textarea(name="fragmentShader" form="shaderCode" style="display: block; margin: 5px; width: 80%; height: 30%;").
+          #{account.fragmentShaderCode}
+        div(class="container" style="background-color: white")
             form(action="shader" method="POST" id="shaderCode")
-                button +
+                span(style="margin: 5px;").
+                  Enabled
+                input(
+                  checked=account.useShaderForProfilePicture
+                  id="useShaderForProfilePicture"
+                  type="checkbox"
+                  name="useShaderForProfilePicture")
+                br
+                button Update
