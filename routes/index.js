@@ -149,6 +149,11 @@ router.post("/login", (req, res) => {
     res.redirect("/");
 });
 
+router.get("/logout", (req, res) => {
+    delete req.session.accountId;
+    res.redirect("/");
+});
+
 router.get("/shader", (req, res) => {
     const account = getAccount(req.session.accountId);
     if (!account) {
