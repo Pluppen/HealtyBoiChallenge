@@ -6,7 +6,7 @@ const session = require("express-session");
 const app = express();
 
 // Set TEST_MODE = true to not have to login again after each code change while testing.
-const TEST_MODE = true;
+const TEST_MODE = false;
 
 app.set("view engine", "pug");
 
@@ -14,9 +14,9 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
-  session({
-    secret: "CHANGEME",
-  }),
+    session({
+        secret: "CHANGEME",
+    }),
 );
 
 app.use((req, res, next) => {
@@ -24,12 +24,16 @@ app.use((req, res, next) => {
         req.session.accountId = 0;
     }
 
-    if (req.session.accountId !== undefined || req.url == "/account" || req.url == "/login") {
+    if (
+        req.session.accountId !== undefined ||
+        req.url == "/account" ||
+        req.url == "/login"
+    ) {
         next();
     } else {
-        res.render("login", {title: "Login"});
+        res.render("login", { title: "Login" });
     }
-})
+});
 
 app.use("/", routes);
 
