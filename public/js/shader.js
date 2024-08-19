@@ -9,7 +9,7 @@ async function setupAllCanvases() {
         );
         setupCanvas(
             canvas.id,
-            accounts.find((account) => account.id == accountId),
+            accounts.find((account) => account.id === accountId),
         );
     }
 }
@@ -66,17 +66,16 @@ function compileShader(ctx, type, source) {
     return shader;
 }
 
-async function createProgram(ctx, id) {
-    id = parseInt(id.replace("profilePictureCanvas", ""));
+async function createProgram(ctx, account) {
     const vertexShader = compileShader(
         ctx,
         ctx.VERTEX_SHADER,
-        await fetch(`/shaders/${id}/shader.vert.glsl`),
+        account.vertexShaderCode,
     );
     const fragmentShader = compileShader(
         ctx,
         ctx.FRAGMENT_SHADER,
-        await fetch(`/shaders/${id}/shader.frag.glsl`),
+        account.fragmentShaderCode,
     );
 
     const program = ctx.createProgram();
@@ -102,13 +101,13 @@ async function createProgram(ctx, id) {
 async function setupCanvas(id, account) {
     const ctx = getRenderingContext(id);
     try {
-        console.log(`Creating shader program for id = ${id}`);
-        ctx.program = await createProgram(ctx, id);
+        console.log(`Creating shader program for ${account.username}`);
+        ctx.program = await createProgram(ctx, account);
         console.log(
-            `Shader program for id = ${id} has been created successfully`,
+            `Shader program for ${account.username} has been created successfully`,
         );
     } catch (ex) {
-        console.error(`Creating shader failed: ${ex}`);
+        console.error(`Creating shader for ${account.username} failed: ${ex}`);
         return;
     }
 
