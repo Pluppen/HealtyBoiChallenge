@@ -1,11 +1,19 @@
 html
     head
         title= title
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet", type="text/css", href="/css/main.css")
         link(href="https://fonts.googleapis.com/css?family=Press+Start+2P", rel="stylesheet")
         link(href="https://unpkg.com/nes.css/css/nes.css", rel="stylesheet")
         script(type="text/javascript" src="/js/shader.js")
+        script(type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js")
     body
+        div(id="audio-player-container")
+            audio(loop="loop" autoplay="autoplay")
+                //source(src="/theme.mp3" type="audio/mpeg")
+            button(id="mute-icon", class="nes-btn") Mute
+            output(id="volume-output") 100
+            input(type="range" id="volume-slider" max="100" value="100")
         nav
             h1="HealtyBoi"
             div
@@ -42,10 +50,9 @@ html
                     if account.id == loggedInId
                         button(class="nes-btn is-success", name="add-xp")="+"
                         button(class="nes-btn is-error", name="remove-xp")="-"
-
-        div(id="welcome-balloon", class="nes-balloon from-left is-dark")
-          p="Hejsan Svejsan!"
+                    else
+                        button(class="nes-btn is-error", name="attack")="Attack"
 
         if modalInfo != null
             script="document.getElementById('dialog-dark-rounded').showModal();"
-
+        script(type="text/javascript" src="/audio.js")
