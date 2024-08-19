@@ -37,7 +37,7 @@ html
                     h3 Level #{account.level}
                     div(class="status-bar")
                         span(class="is-primary")=account.xp
-                        progress(class="nes-progress is-primary", value=account.xp, max=account.maxxp)
+                        progress(class="nes-progress is-primary", value=account.xp, max=account.maxXp)
                     input(name="id", value=account.id, hidden)
                     if account.id == loggedInId
                         button(class="nes-btn is-success", name="add-xp")="+"

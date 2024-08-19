@@ -1,7 +1,10 @@
+// @ts-check
+
 const express = require("express");
 const routes = require("./routes/index");
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const middlewares = require("./middlewares/middlewares");
 
 const app = express();
 
@@ -19,21 +22,11 @@ app.use(
     }),
 );
 
-app.use((req, res, next) => {
-    if (TEST_MODE) {
-        req.session.accountId = 0;
-    }
-
-    if (
-        req.session.accountId !== undefined ||
-        req.url == "/account" ||
-        req.url == "/login"
-    ) {
-        next();
-    } else {
-        res.render("login", { title: "Login" });
-    }
-});
+if (TEST_MODE) {
+    app.use(middlewares.testMode);
+} else {
+    app.use(middlewares.requireLoggedIn);
+}
 
 app.use("/", routes);
 
