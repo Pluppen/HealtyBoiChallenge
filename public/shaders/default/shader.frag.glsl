@@ -4,6 +4,7 @@ precision highp float;
 uniform float time;
 uniform vec2 res;
 uniform float xp;
+uniform float maxXp;
 uniform float level;
 
 varying vec2 v_tex;

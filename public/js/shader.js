@@ -185,6 +185,11 @@ function initializeAttributes(ctx, account) {
         ctx.uniform1f(ctx.program.xp, account.xp);
     }
 
+    ctx.program.maxXp = ctx.getUniformLocation(ctx.program, "maxXp");
+    if (ctx.program.maxXp) {
+        ctx.uniform1f(ctx.program.maxXp, account.maxxp);
+    }
+
     ctx.program.level = ctx.getUniformLocation(ctx.program, "level");
     if (ctx.program.level) {
         ctx.uniform1f(ctx.program.level, account.level);

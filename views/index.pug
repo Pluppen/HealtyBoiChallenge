@@ -9,7 +9,8 @@ html
         nav
             h1="HealtyBoi"
             div
-                p="Log Out"
+                a(href="/logout")
+                  p="Log Out"
         if modalInfo != null
             section
               dialog(class="nes-dialog is-dark is-rounded", id="dialog-dark-rounded")
