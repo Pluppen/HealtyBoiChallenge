@@ -1,3 +1,4 @@
+console.log('Shader');
 window.addEventListener("load", setupAllCanvases, false);
 
 async function setupAllCanvases() {

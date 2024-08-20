@@ -1,142 +1,165 @@
 const express = require("express");
-const pug = require("pug");
+const path = require("path");
 
 const router = express.Router();
 
 const game = new (require("../game/game"))();
 const Password = require("../game/password");
 
-router.get("/", (req, res) => {
-    res.render("index", {
-        title: "HealtyBoiGame",
-        message: "Hello there!",
-        loggedInId: req.session.accountId,
-        accounts: game.accounts,
-    });
-});
+const { generateToken } = require("../utils/jwtUtils");
 
 router.post("/", (req, res) => {
-    const account = game.getAccountById(req.session.accountId);
+    let modalInfo = null;
+    const account = game.getAccountById(req.user.id);
     if (!account) {
-        invalidAccountRender(res, req.session.accountId);
+        res.status(401).json({
+            success: false,
+            message: "Could not find any account tied to your token",
+        });
         return;
     }
-    let modalInfo = null;
-    let xpMultiplier = 1;
-    if ("remove-xp" in req.body) {
-        xpMultiplier = -1;
-    }
-    const amount = 10 * xpMultiplier;
-    const leveledUp = account.addXp(amount);
 
-    if (leveledUp) {
-        modalInfo = {
-            title: "You Leveled Up!",
-            description: `You leveled up to level ${account.level}`,
-            extraHtml: '<i class="nes-icon is-large star"></i>',
-        };
+    let target = null;
+    switch (req.body.action) {
+        case "attack":
+            target = game.getAccountById(req.body.id);
+            target.damage();
+            break;
+        case "heal":
+            target = game.getAccountById(req.body.id);
+            target.heal();
+            break;
+        default:
+            let xpMultiplier = 1;
+            if ("remove-xp" in req.body) {
+                xpMultiplier = -1;
+            }
+            const amount = 10 * xpMultiplier;
+            const leveledUp = account.addXp(amount);
+
+            if (leveledUp) {
+                modalInfo = {
+                    title: "You Leveled Up!",
+                    description: `You leveled up to level ${account.level}`,
+                    extraHtml: '<i class="nes-icon is-large star"></i>',
+                };
+            }
     }
 
-    res.render("index", {
-        title: "HealtyBoiGame",
-        message: "Hello there!",
-        accounts: game.accounts,
-        loggedInId: req.session.accountId,
+    res.json({
+        success: true,
+        accounts: game.accounts.map((a) => ({
+            ...a,
+            passwordHash: "",
+            passwordSalt: "",
+        })),
         modalInfo,
     });
 });
 
 router.get("/account", (req, res) => {
-    res.send(
-        JSON.stringify(
-            game.accounts.map((a) => {
-                const obj = { ...a };
-                obj.passwordHash = "";
-                obj.passwordSalt = "";
-                return obj;
-            }),
-        ),
+    res.json(
+        game.accounts.map((a) => ({
+            ...a,
+            passwordHash: "",
+            passwordSalt: "",
+        })),
     );
 });
 
 router.post("/account", (req, res) => {
     const username = req.body.username;
     if (game.getAccountByUsername(username)) {
-        res.render("error", {
+        res.status(401).json({
+            success: false,
             message: `The user '${username}' already exists.`,
         });
         return;
     }
     const password = req.body.password;
     if (!password) {
-        res.render("error", { message: "Invalid password." });
+        res.status(403).json({
+            success: false,
+            message: "Invalid password",
+        });
         return;
     }
 
-    const account = game.createAccount(username, password);
+    game.createAccount(username, password);
     game.save();
-    req.session.accountId = account.id;
-    res.redirect("/");
+    res.json({ success: true, message: "Account created successfully" });
 });
 
 router.post("/login", (req, res) => {
     const username = req.body.username;
     const account = game.getAccountByUsername(username);
     if (!account) {
-        res.render("error", {
+        res.status(401).json({
+            success: false,
             message: `The username '${username}' doesn't exist, create an account first.`,
         });
         return;
     }
+
     const password = req.body.password;
     if (
         !Password.verify(password, account.passwordSalt, account.passwordHash)
     ) {
-        res.render("error", {
+        res.status(401).json({
+            success: false,
             message: "Wrong password.",
         });
         return;
     }
 
-    req.session.accountId = account.id;
-    res.redirect("/");
+    const token = generateToken({
+        ...account,
+        passwordHash: "you wish",
+        passwordSalt: "you wish",
+    });
+    res.json({
+        success: true,
+        message: "Authentication successful!",
+        token,
+        user: account,
+    });
 });
 
 router.get("/logout", (req, res) => {
     delete req.session.accountId;
+    delete req.user;
+    // TODO: Also do some invalidation of token.
     res.redirect("/");
-});
-
-router.get("/shader", (req, res) => {
-    const account = game.getAccountById(req.session.accountId);
-    if (!account) {
-        invalidAccountRender(res, req.session.accountId);
-        return;
-    }
-
-    res.render("shader", { account: account });
 });
 
 router.post("/shader", (req, res) => {
-    const account = game.getAccountById(req.session.accountId);
+    const account = game.getAccountById(req.user.id);
     if (!account) {
-        invalidAccountRender(res, req.session.accountId);
+        res.status(401).json({
+            success: false,
+            message: "Could not find any account tied to your token",
+        });
         return;
     }
-    account.vertexShaderCode = req.body.vertexShader;
-    account.fragmentShaderCode = req.body.fragmentShader;
 
-    account.useShaderForProfilePicture =
-        req.body.useShaderForProfilePicture === "on";
+    account.vertexShaderCode = req.body.vertexShaderCode;
+    account.fragmentShaderCode = req.body.fragmentShaderCode;
+    account.useShaderForProfilePicture = req.body.useShaderForProfilePicture;
 
     game.save();
-    res.redirect("/");
+    res.json({
+        success: true,
+        message: "Updated shader profile",
+        account: { ...account, passwordHash: "", passwordSalt: "" },
+    });
 });
 
-function invalidAccountRender(res, id) {
-    res.render("error", {
-        message: `Couldn't find account with ID ${id}`,
-    });
-}
+// Render React App if no direct match on path
+router.get("/", (req, res) => {
+    res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
+    res.header("Expires", "-1");
+    res.header("Pragma", "no-cache");
+    res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+});
 
 module.exports = router;
