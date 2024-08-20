@@ -59,12 +59,11 @@ router.post("/", (req, res) => {
 
 router.get("/account", (req, res) => {
     res.json(
-        game.accounts.map((a) => {
-            const obj = { ...a };
-            obj.passwordHash = "";
-            obj.passwordSalt = "";
-            return obj;
-        }),
+        game.accounts.map((a) => ({
+            ...a,
+            passwordHash: "",
+            passwordSalt: "",
+        })),
     );
 });
 
