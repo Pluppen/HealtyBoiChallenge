@@ -52,6 +52,16 @@ class Account {
         this.maxXp = 100;
 
         /**
+         * @type {boolean}
+         */
+        this.alive = true;
+
+        /**
+         * @type {number}
+         */
+        this.hp = 3;
+
+        /**
          * @type {string | undefined}
          */
         this.img = undefined;
@@ -98,6 +108,32 @@ class Account {
         this.level += 1;
         this.maxXp = 100 + this.maxXp;
         return true;
+    }
+
+    /**
+     * Decreases hp
+     */
+    damage() {
+        let newHP = this.hp - 0.5;
+        if (newHP <= 0) {
+            this.alive = false;
+            this.hp = 0;
+        } else {
+            this.hp = newHP;
+        }
+    }
+
+    /**
+     * Increases hp
+     */
+    heal() {
+        this.alive = true;
+        if (this.hp + 0.5 >= 3) {
+            this.hp = 3;
+        }
+        else {
+            this.hp += 0.5;
+        }
     }
 
     /**

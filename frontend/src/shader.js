@@ -1,20 +1,3 @@
-console.log('Shader');
-window.addEventListener("load", setupAllCanvases, false);
-
-async function setupAllCanvases() {
-    const accounts = JSON.parse(await fetch("/account"));
-    const canvases = document.getElementsByTagName("canvas");
-    for (const canvas of canvases) {
-        const accountId = parseInt(
-            canvas.id.replace("profilePictureCanvas", ""),
-        );
-        setupCanvas(
-            canvas.id,
-            accounts.find((account) => account.id === accountId),
-        );
-    }
-}
-
 function getRenderingContext(id) {
     console.log(`Getting element with ID '${id}'`);
     const canvas = document.querySelector(`#${id}`);
@@ -26,27 +9,7 @@ function getRenderingContext(id) {
         );
         return null;
     }
-    ctx.canvas = canvas;
     return ctx;
-}
-
-async function fetch(url) {
-    return new Promise((resolve, reject) => {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = function () {
-            try {
-                if (this.status <= 199 || this.status >= 300) {
-                    reject(this.status);
-                    return;
-                }
-                resolve(this.responseText);
-            } catch (ex) {
-                reject(ex);
-            }
-        };
-        xhttp.open("GET", url);
-        xhttp.send();
-    });
 }
 
 function compileShader(ctx, type, source) {
@@ -99,7 +62,7 @@ async function createProgram(ctx, account) {
     return program;
 }
 
-async function setupCanvas(id, account) {
+export async function setupCanvas(id, account) {
     const ctx = getRenderingContext(id);
     try {
         console.log(`Creating shader program for ${account.username}`);
@@ -130,6 +93,7 @@ async function setupCanvas(id, account) {
 
         ctx.drawArrays(ctx.TRIANGLES, 0, 6);
     }, 10);
+    return ctx;
 }
 
 function initializeAttributes(ctx, account) {
@@ -237,7 +201,7 @@ function initializeAttributes(ctx, account) {
     });
 }
 
-function cleanup(ctx) {
+export function cleanup(ctx) {
     ctx.useProgram(null);
     if (ctx.vertexBuffer) {
         ctx.deleteBuffer(ctx.vertexBuffer);
