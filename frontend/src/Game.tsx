@@ -26,7 +26,7 @@ const Game: React.FC = () => {
     const [modalInfo, setModalInfo] = useState<IModalInfo | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:3000/account").then(res => res.json()).then((res) => {
+        fetch(`${process.env.REACT_APP_BASE_URL}/account`).then(res => res.json()).then((res) => {
             setAccounts(res);
         })
     }, []);

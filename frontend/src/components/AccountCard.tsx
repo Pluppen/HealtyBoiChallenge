@@ -3,7 +3,7 @@ import {IAccount} from '../Game';
 import {useAuth} from '../App';
 import {Link} from 'react-router-dom';
 
-import {setupCanvas, cleanup} from '../shader';
+import {setupCanvas} from '../shader';
 
 const HealthPointsRow: React.FC<{hp: number}> = ({hp}) => {
 
@@ -47,7 +47,7 @@ const AccountCard: React.FC<{account: IAccount, setAccounts: any, setModalInfo: 
     }, [account])
 
     const accountAction = (action: string) => {
-        fetch("http://localhost:3000/", {
+        fetch(`${process.env.REACT_APP_BASE_URL}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -22,7 +22,7 @@ const Shader: React.FC = () => {
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault();
 
-        fetch("http://localhost:3000/shader", {
+        fetch(`${process.env.REACT_APP_BASE_URL}/shader`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

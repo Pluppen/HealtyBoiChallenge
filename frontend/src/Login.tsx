@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   let [regPassword, setRegPassword] = useState("");
 
   let login = (user: string, pass: string) => {
-    fetch("http://localhost:3000/login", {
+    fetch(`${process.env.REACT_APP_BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +42,7 @@ const Login: React.FC = () => {
   let handleRegistrationEvent = (e: React.FormEvent) => {
     e.preventDefault();
 
-    fetch("http://localhost:3000/account", {
+    fetch(`${process.env.REACT_APP_BASE_URL}/account`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
